@@ -16,10 +16,9 @@
     th {
       background-color: #f2f2f2;
     }
-    .dictionary-link {
+    a.word-link {
       color: blue;
       text-decoration: underline;
-      cursor: pointer;
     }
   </style>
 </head>
@@ -44,7 +43,6 @@
         <th>Word</th>
         <th>Meaning</th>
         <th>Example</th>
-        <th>Dictionary</th>
       </tr>
     </thead>
     <tbody>
@@ -69,10 +67,9 @@
       words.forEach(entry => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${entry.word}</td>
+          <td><a href="https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(entry.word)}" target="_blank" class="word-link">${entry.word}</a></td>
           <td>${entry.meaning}</td>
           <td>${entry.example || 'N/A'}</td>
-          <td><span class="dictionary-link" onclick="openDictionary('${entry.word}')">Cambridge</span></td>
         `;
         tableBody.appendChild(row);
       });
@@ -82,11 +79,6 @@
       const query = document.getElementById('search').value.toLowerCase();
       const filtered = vocabulary.filter(entry => entry.word.toLowerCase().includes(query));
       displayVocabulary(filtered);
-    }
-
-    // Function to open the Cambridge Dictionary
-    function openDictionary(word) {
-      window.open(`https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(word)}`, '_blank');
     }
 
     // Handle form submission to add a new word
