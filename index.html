@@ -20,6 +20,19 @@
       color: blue;
       text-decoration: underline;
     }
+    .btn {
+      padding: 5px 10px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    .btn-delete {
+      color: white;
+      background-color: red;
+    }
+    .btn-batch-delete {
+      color: white;
+      background-color: orange;
+    }
   </style>
 </head>
 <body>
@@ -34,6 +47,9 @@
     <button type="submit">Add Word</button>
   </form>
 
+  <!-- Batch Delete Button -->
+  <button id="batchDeleteBtn" class="btn btn-batch-delete" style="display: none;">Delete Selected</button>
+
   <!-- Search Bar -->
   <input type="text" id="search" placeholder="Search words..." oninput="filterWords()" />
 
@@ -41,9 +57,11 @@
   <table id="vocabularyTable">
     <thead>
       <tr>
+        <th>Select</th>
         <th>Word</th>
         <th>Meaning</th>
         <th>Example</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -55,41 +73,48 @@
     let vocabulary = [];
 
     // Fetch vocabulary.json and display it in a table
-    fetch('vocabulary.json')
-      .then(response => response.json())
-      .then(data => {
-        vocabulary = data;
-        displayVocabulary(data);
+    async function loadVocabulary() {
+      const response = await fetch('https://api.github.com/repos/darwin-xu/vocabulary/contents/vocabulary.json', {
+        headers: { 'Authorization': `Bearer ${getToken()}` },
       });
 
-    function displayVocabulary(words) {
+      if (!response.ok) {
+        alert('Error fetching vocabulary. Please check your Personal Access Token.');
+        return;
+      }
+
+      const fileData = await response.json();
+      vocabulary = JSON.parse(atob(fileData.content));
+      displayVocabulary(vocabulary, fileData.sha);
+    }
+
+    // Display vocabulary in the table
+    function displayVocabulary(words, sha) {
       const tableBody = document.getElementById('vocabularyTable').querySelector('tbody');
       tableBody.innerHTML = ''; // Clear previous content
-      words.forEach(entry => {
+      words.forEach((entry, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
+          <td><input type="checkbox" data-index="${index}" /></td>
           <td><a href="https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(entry.word)}" target="_blank" class="word-link">${entry.word}</a></td>
           <td>${entry.meaning}</td>
           <td>${entry.example || 'N/A'}</td>
+          <td><button class="btn btn-delete" onclick="deleteWord(${index}, '${sha}')">Delete</button></td>
         `;
         tableBody.appendChild(row);
       });
+
+      // Show or hide batch delete button
+      document.getElementById('batchDeleteBtn').style.display = words.length > 0 ? 'inline-block' : 'none';
     }
 
-    function filterWords() {
-      const query = document.getElementById('search').value.toLowerCase();
-      const filtered = vocabulary.filter(entry => entry.word.toLowerCase().includes(query));
-      displayVocabulary(filtered);
-    }
-
-    // Handle form submission to add a new word
+    // Add new word
     document.getElementById('vocabForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const word = document.getElementById('word').value.trim();
       const meaning = document.getElementById('meaning').value.trim();
       const example = document.getElementById('example').value.trim();
-      const token = document.getElementById('personalAccessToken').value.trim();
 
       // Check for duplicates
       if (vocabulary.some(entry => entry.word.toLowerCase() === word.toLowerCase())) {
@@ -97,52 +122,74 @@
         return;
       }
 
-      if (!token) {
-        alert('A Personal Access Token is required to submit a new word.');
-        return;
-      }
+      // Add new word
+      vocabulary.push({ word, meaning, example });
+      await updateVocabulary('Add a new word');
+    });
 
-      // Add new word to vocabulary
-      const newEntry = { word, meaning, example };
-      vocabulary.push(newEntry);
+    // Delete a word
+    async function deleteWord(index, sha) {
+      vocabulary.splice(index, 1);
+      await updateVocabulary('Delete a word', sha);
+    }
 
-      // Fetch current SHA of the file
-      const fileResponse = await fetch('https://api.github.com/repos/darwin-xu/vocabulary/contents/vocabulary.json', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+    // Batch delete words
+    document.getElementById('batchDeleteBtn').addEventListener('click', async () => {
+      const selected = document.querySelectorAll('input[type="checkbox"]:checked');
+      const indicesToRemove = Array.from(selected).map(input => parseInt(input.dataset.index, 10));
+      vocabulary = vocabulary.filter((_, index) => !indicesToRemove.includes(index));
+      await updateVocabulary('Batch delete words');
+    });
+
+    // Update vocabulary.json
+    async function updateVocabulary(message) {
+      const response = await fetch('https://api.github.com/repos/darwin-xu/vocabulary/contents/vocabulary.json', {
+        headers: { 'Authorization': `Bearer ${getToken()}` },
       });
 
-      if (!fileResponse.ok) {
+      if (!response.ok) {
         alert('Error fetching file data. Please check your Personal Access Token.');
         return;
       }
 
-      const fileData = await fileResponse.json();
+      const fileData = await response.json();
       const updatedContent = btoa(JSON.stringify(vocabulary, null, 2)); // Base64 encode JSON
 
-      // Update vocabulary.json on GitHub
       const updateResponse = await fetch('https://api.github.com/repos/darwin-xu/vocabulary/contents/vocabulary.json', {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${getToken()}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: 'Add new word',
+          message,
           content: updatedContent,
           sha: fileData.sha, // Required to update file
         }),
       });
 
       if (updateResponse.ok) {
-        alert('Word added successfully!');
-        displayVocabulary(vocabulary); // Update table
-        document.getElementById('vocabForm').reset(); // Clear form
+        alert(`${message} successfully!`);
+        loadVocabulary(); // Reload vocabulary
       } else {
         alert('Error updating the file. Please check your Personal Access Token.');
       }
-    });
+    }
+
+    // Search functionality
+    function filterWords() {
+      const query = document.getElementById('search').value.toLowerCase();
+      const filtered = vocabulary.filter(entry => entry.word.toLowerCase().includes(query));
+      displayVocabulary(filtered);
+    }
+
+    // Get the Personal Access Token
+    function getToken() {
+      return document.getElementById('personalAccessToken').value.trim();
+    }
+
+    // Load vocabulary on page load
+    loadVocabulary();
   </script>
 </body>
 </html>
