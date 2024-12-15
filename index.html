@@ -2,16 +2,60 @@
 <html>
 <head>
   <title>Vocabulary</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .dictionary-link {
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <h1>Vocabulary List</h1>
+
+  <!-- Form to Add New Word -->
+  <form id="vocabForm">
+    <input type="text" id="word" placeholder="Word" required />
+    <input type="text" id="meaning" placeholder="Meaning" required />
+    <input type="text" id="example" placeholder="Example Sentence" />
+    <button type="submit">Add Word</button>
+  </form>
+
+  <!-- Search Bar -->
   <input type="text" id="search" placeholder="Search words..." oninput="filterWords()" />
-  <div id="vocabulary"></div>
+
+  <!-- Table to Display Vocabulary -->
+  <table id="vocabularyTable">
+    <thead>
+      <tr>
+        <th>Word</th>
+        <th>Meaning</th>
+        <th>Example</th>
+        <th>Dictionary</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Words will be dynamically added here -->
+    </tbody>
+  </table>
 
   <script>
     let vocabulary = [];
 
-    // Fetch and display vocabulary
+    // Fetch vocabulary.json and display it in a table
     fetch('vocabulary.json')
       .then(response => response.json())
       .then(data => {
@@ -20,14 +64,17 @@
       });
 
     function displayVocabulary(words) {
-      const container = document.getElementById('vocabulary');
-      container.innerHTML = ''; // Clear previous content
+      const tableBody = document.getElementById('vocabularyTable').querySelector('tbody');
+      tableBody.innerHTML = ''; // Clear previous content
       words.forEach(entry => {
-        container.innerHTML += `<div>
-          <h3>${entry.word}</h3>
-          <p><strong>Meaning:</strong> ${entry.meaning}</p>
-          <p><strong>Example:</strong> ${entry.example || 'N/A'}</p>
-        </div>`;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${entry.word}</td>
+          <td>${entry.meaning}</td>
+          <td>${entry.example || 'N/A'}</td>
+          <td><span class="dictionary-link" onclick="openDictionary('${entry.word}')">Cambridge</span></td>
+        `;
+        tableBody.appendChild(row);
       });
     }
 
@@ -36,6 +83,51 @@
       const filtered = vocabulary.filter(entry => entry.word.toLowerCase().includes(query));
       displayVocabulary(filtered);
     }
+
+    // Function to open the Cambridge Dictionary
+    function openDictionary(word) {
+      window.open(`https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(word)}`, '_blank');
+    }
+
+    // Handle form submission to add a new word
+    document.getElementById('vocabForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const word = document.getElementById('word').value.trim();
+      const meaning = document.getElementById('meaning').value.trim();
+      const example = document.getElementById('example').value.trim();
+
+      // Check for duplicates
+      if (vocabulary.some(entry => entry.word.toLowerCase() === word.toLowerCase())) {
+        alert('This word already exists!');
+        return;
+      }
+
+      // Add new word to vocabulary
+      const newEntry = { word, meaning, example };
+      vocabulary.push(newEntry);
+
+      // Update vocabulary.json on GitHub
+      await fetch('https://api.github.com/repos/your-username/vocabulary/contents/vocabulary.json', {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer YOUR_PERSONAL_ACCESS_TOKEN',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: 'Add new word',
+          content: btoa(JSON.stringify(vocabulary, null, 2)), // Base64 encode JSON
+          sha: 'FILE_SHA_FROM_PREVIOUS_FETCH', // Required to update file
+        }),
+      });
+
+      // Update table
+      displayVocabulary(vocabulary);
+
+      // Clear form
+      document.getElementById('vocabForm').reset();
+      alert('Word added successfully!');
+    });
   </script>
 </body>
 </html>
