@@ -1,17 +1,332 @@
 [
   {
-    "word": "Exemplary",
-    "meaning": "Outstanding or ideal",
-    "example": "Her work was exemplary."
+    "word": "acute",
+    "meaning": "",
+    "example": ""
   },
   {
-    "word": "Eloquent",
-    "meaning": "Fluent or persuasive in speaking or writing",
-    "example": "He gave an eloquent speech."
+    "word": "affiliated",
+    "meaning": "",
+    "example": ""
   },
   {
-    "word": "a",
-    "meaning": "b",
-    "example": "c"
+    "word": "affinity",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "affirmative",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "affluence",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "anecdote",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "antonym",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "awry",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "benevolent",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "bigotries",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "capacious",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "capricious",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "catalyst",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "cavalry",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "chronic",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "colloquially",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "commodity",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "congregation",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "contortion",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "counterpart",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "criticality",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "curate",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "dawdle",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "deflated",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "deforestation",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "delicatessen",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "divulge",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "efficacy",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "endeavor",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "ennui",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "evangelical",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "evangelist",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "exacerbate",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "excruciating",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "fatuities",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "feat",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "hefty",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "holistic",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "imperative",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "infallible",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "intrigue",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "inundate",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "lateral",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "lethargic",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "malevolent",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "manifestation",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "masochist",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "moratorium",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "optimism",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "paralysis",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "peripheral",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "permeate",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "pessimism",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "porous",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "prognosticate",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "prospector",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "prosperity",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "reciprocity",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "resuscitate",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "rigorous",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "rubric",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "schizophrenia",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "stigma",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "synonym",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "taxonomy",
+    "meaning": "",
+    "example": ""
+  },
+  {
+    "word": "thesaurus",
+    "meaning": "",
+    "example": ""
   }
 ]

@@ -128,6 +128,10 @@
 
       // Add new word
       vocabulary.push({ word, meaning, example });
+
+      // Sort vocabulary alphabetically by word
+      vocabulary.sort((a, b) => a.word.localeCompare(b.word));
+
       await updateVocabulary('Add a new word', token);
     });
 
