@@ -1,1 +1,41 @@
-<h1>hello 123</h1>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vocabulary</title>
+</head>
+<body>
+  <h1>Vocabulary List</h1>
+  <input type="text" id="search" placeholder="Search words..." oninput="filterWords()" />
+  <div id="vocabulary"></div>
+
+  <script>
+    let vocabulary = [];
+
+    // Fetch and display vocabulary
+    fetch('vocabulary.json')
+      .then(response => response.json())
+      .then(data => {
+        vocabulary = data;
+        displayVocabulary(data);
+      });
+
+    function displayVocabulary(words) {
+      const container = document.getElementById('vocabulary');
+      container.innerHTML = ''; // Clear previous content
+      words.forEach(entry => {
+        container.innerHTML += `<div>
+          <h3>${entry.word}</h3>
+          <p><strong>Meaning:</strong> ${entry.meaning}</p>
+          <p><strong>Example:</strong> ${entry.example || 'N/A'}</p>
+        </div>`;
+      });
+    }
+
+    function filterWords() {
+      const query = document.getElementById('search').value.toLowerCase();
+      const filtered = vocabulary.filter(entry => entry.word.toLowerCase().includes(query));
+      displayVocabulary(filtered);
+    }
+  </script>
+</body>
+</html>
