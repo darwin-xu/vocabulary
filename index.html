@@ -30,6 +30,7 @@
     <input type="text" id="word" placeholder="Word" required />
     <input type="text" id="meaning" placeholder="Meaning" required />
     <input type="text" id="example" placeholder="Example Sentence" />
+    <input type="password" id="personalAccessToken" placeholder="Your Personal Access Token" required />
     <button type="submit">Add Word</button>
   </form>
 
@@ -88,6 +89,7 @@
       const word = document.getElementById('word').value.trim();
       const meaning = document.getElementById('meaning').value.trim();
       const example = document.getElementById('example').value.trim();
+      const token = document.getElementById('personalAccessToken').value.trim();
 
       // Check for duplicates
       if (vocabulary.some(entry => entry.word.toLowerCase() === word.toLowerCase())) {
@@ -95,30 +97,51 @@
         return;
       }
 
+      if (!token) {
+        alert('A Personal Access Token is required to submit a new word.');
+        return;
+      }
+
       // Add new word to vocabulary
       const newEntry = { word, meaning, example };
       vocabulary.push(newEntry);
 
+      // Fetch current SHA of the file
+      const fileResponse = await fetch('https://api.github.com/repos/darwin-xu/vocabulary/contents/vocabulary.json', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!fileResponse.ok) {
+        alert('Error fetching file data. Please check your Personal Access Token.');
+        return;
+      }
+
+      const fileData = await fileResponse.json();
+      const updatedContent = btoa(JSON.stringify(vocabulary, null, 2)); // Base64 encode JSON
+
       // Update vocabulary.json on GitHub
-      await fetch('https://api.github.com/repos/your-username/vocabulary/contents/vocabulary.json', {
+      const updateResponse = await fetch('https://api.github.com/repos/darwin-xu/vocabulary/contents/vocabulary.json', {
         method: 'PUT',
         headers: {
-          'Authorization': 'Bearer YOUR_PERSONAL_ACCESS_TOKEN',
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           message: 'Add new word',
-          content: btoa(JSON.stringify(vocabulary, null, 2)), // Base64 encode JSON
-          sha: 'FILE_SHA_FROM_PREVIOUS_FETCH', // Required to update file
+          content: updatedContent,
+          sha: fileData.sha, // Required to update file
         }),
       });
 
-      // Update table
-      displayVocabulary(vocabulary);
-
-      // Clear form
-      document.getElementById('vocabForm').reset();
-      alert('Word added successfully!');
+      if (updateResponse.ok) {
+        alert('Word added successfully!');
+        displayVocabulary(vocabulary); // Update table
+        document.getElementById('vocabForm').reset(); // Clear form
+      } else {
+        alert('Error updating the file. Please check your Personal Access Token.');
+      }
     });
   </script>
 </body>
