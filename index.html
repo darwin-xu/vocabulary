@@ -3,71 +3,186 @@
 <head>
   <title>Vocabulary</title>
   <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #343a40;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+    }
+
+    footer {
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      background-color: white;
     }
+
     th, td {
       border: 1px solid #ddd;
-      padding: 8px;
+      padding: 12px;
       text-align: left;
     }
+
     th {
-      background-color: #f2f2f2;
+      background-color: #007bff;
+      color: white;
+      text-transform: uppercase;
     }
-    a.word-link {
-      color: blue;
+
+    td a.word-link {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    td a.word-link:hover {
       text-decoration: underline;
     }
+
     .btn {
-      padding: 5px 10px;
+      padding: 8px 12px;
       margin: 5px;
       cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+      font-size: 14px;
     }
+
     .btn-delete {
+      background-color: #dc3545;
       color: white;
-      background-color: red;
     }
+
+    .btn-delete:hover {
+      background-color: #c82333;
+    }
+
     .btn-batch-delete {
+      background-color: #ffc107;
+      color: black;
+    }
+
+    .btn-batch-delete:hover {
+      background-color: #e0a800;
+    }
+
+    button[type="submit"] {
+      background-color: #007bff;
       color: white;
-      background-color: orange;
+      border-radius: 4px;
+      padding: 10px 15px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    input[type="text"], input[type="password"] {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      max-width: 300px;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+
+    .search-bar {
+      margin-top: 20px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    @media (max-width: 768px) {
+      table {
+        font-size: 14px;
+      }
+
+      th, td {
+        padding: 8px;
+      }
+
+      .btn {
+        font-size: 12px;
+        padding: 6px 10px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Vocabulary List</h1>
+  <header>
+    <h1>Vocabulary Manager</h1>
+  </header>
 
-  <!-- Form to Add New Word -->
-  <form id="vocabForm">
-    <input type="text" id="word" placeholder="Word" required />
-    <input type="text" id="meaning" placeholder="Meaning" required />
-    <input type="text" id="example" placeholder="Example Sentence" />
-    <input type="password" id="personalAccessToken" placeholder="Your Personal Access Token" required />
-    <button type="submit">Add Word</button>
-  </form>
+  <div class="container">
+    <h2>Add a New Word</h2>
+    <form id="vocabForm">
+      <input type="text" id="word" placeholder="Word" required />
+      <input type="text" id="meaning" placeholder="Meaning" required />
+      <input type="text" id="example" placeholder="Example Sentence" />
+      <input type="password" id="personalAccessToken" placeholder="Your Personal Access Token" required />
+      <button type="submit">Add Word</button>
+    </form>
 
-  <!-- Batch Delete Button -->
-  <button id="batchDeleteBtn" class="btn btn-batch-delete" style="display: none;">Delete Selected</button>
+    <div class="search-bar">
+      <h2>Search Vocabulary</h2>
+      <input type="text" id="search" placeholder="Search words..." oninput="filterWords()" />
+    </div>
 
-  <!-- Search Bar -->
-  <input type="text" id="search" placeholder="Search words..." oninput="filterWords()" />
+    <button id="batchDeleteBtn" class="btn btn-batch-delete" style="display: none;">Delete Selected</button>
 
-  <!-- Table to Display Vocabulary -->
-  <table id="vocabularyTable">
-    <thead>
-      <tr>
-        <th>Select</th>
-        <th>Word</th>
-        <th>Meaning</th>
-        <th>Example</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Words will be dynamically added here -->
-    </tbody>
-  </table>
+    <table id="vocabularyTable">
+      <thead>
+        <tr>
+          <th>Select</th>
+          <th>Word</th>
+          <th>Meaning</th>
+          <th>Example</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Words will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <p>Vocabulary Manager &copy; 2024</p>
+  </footer>
 
   <script>
     let vocabulary = [];
