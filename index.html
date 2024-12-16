@@ -73,15 +73,6 @@
       font-size: 14px;
     }
 
-    .btn-delete {
-      background-color: #dc3545;
-      color: white;
-    }
-
-    .btn-delete:hover {
-      background-color: #c82333;
-    }
-
     .btn-batch-delete {
       background-color: #ffc107;
       color: black;
@@ -171,7 +162,6 @@
           <th>Word</th>
           <th>Meaning</th>
           <th>Example</th>
-          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -212,7 +202,6 @@
           <td><a href="https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(entry.word)}" target="_blank" class="word-link">${entry.word}</a></td>
           <td>${entry.meaning}</td>
           <td>${entry.example || 'N/A'}</td>
-          <td><button class="btn btn-delete" onclick="deleteWord(${index})">Delete</button></td>
         `;
         tableBody.appendChild(row);
       });
@@ -249,17 +238,6 @@
 
       await updateVocabulary('Add a new word', token);
     });
-
-    // Delete a word
-    async function deleteWord(index) {
-      const token = document.getElementById('personalAccessToken').value.trim();
-      if (!token) {
-        alert('A Personal Access Token is required to delete a word.');
-        return;
-      }
-      vocabulary.splice(index, 1);
-      await updateVocabulary('Delete a word', token);
-    }
 
     // Batch delete words
     document.getElementById('batchDeleteBtn').addEventListener('click', async () => {
