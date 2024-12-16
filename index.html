@@ -265,7 +265,7 @@
         }
 
         const fileData = await response.json();
-        const updatedContent = btoa(JSON.stringify(vocabulary, null, 2)); // Base64 encode JSON
+        const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(vocabulary, null, 2)))); // Encode with Unicode support
 
         const updateResponse = await fetch('https://api.github.com/repos/darwin-xu/vocabulary/contents/vocabulary.json', {
           method: 'PUT',
