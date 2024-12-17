@@ -193,18 +193,34 @@
     }
 
     // Display vocabulary in the table
+    let selectedWords = new Set(); // Store selected words globally
+
     function displayVocabulary(words) {
       const tableBody = document.getElementById('vocabularyTable').querySelector('tbody');
       tableBody.innerHTML = ''; // Clear previous content
-      words.forEach((entry, index) => {
+      words.forEach((entry) => {
+        const isChecked = selectedWords.has(entry.word); // Check if word was selected
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td><input type="checkbox" data-index="${index}" /></td>
+          <td>
+            <input type="checkbox" data-word="${entry.word}" ${isChecked ? 'checked' : ''} />
+          </td>
           <td><a href="https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(entry.word)}" target="_blank" class="word-link">${entry.word}</a></td>
           <td>${entry.meaning}</td>
           <td>${entry.example || 'N/A'}</td>
         `;
         tableBody.appendChild(row);
+      });
+
+      // Update selection when checkboxes change
+      document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) {
+            selectedWords.add(checkbox.dataset.word);
+          } else {
+            selectedWords.delete(checkbox.dataset.word);
+          }
+        });
       });
 
       // Show or hide batch delete button
@@ -248,8 +264,13 @@
         return;
       }
       const selected = document.querySelectorAll('input[type="checkbox"]:checked');
-      const indicesToRemove = Array.from(selected).map(input => parseInt(input.dataset.index, 10));
-      vocabulary = vocabulary.filter((_, index) => !indicesToRemove.includes(index));
+      if (selected.length === 0) {
+        alert('No words selected for deletion.');
+        return; // Prevent empty commit
+      }
+
+      const wordsToRemove = Array.from(selected).map(input => input.dataset.word);
+      vocabulary = vocabulary.filter(entry => !wordsToRemove.includes(entry.word));
       await updateVocabulary('Batch delete words', token);
     });
 
@@ -302,7 +323,7 @@
     loadVocabulary();
 
     // Load new words periodically
-    //setInterval(loadVocabulary, 5000); // Load every 5 seconds
+    setInterval(loadVocabulary, 5000); // Load every 5 seconds
   </script>
 </body>
 </html>
