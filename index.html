@@ -300,6 +300,9 @@
 
     // Load vocabulary on page load
     loadVocabulary();
+
+    // Load new words periodically
+    setInterval(loadVocabulary, 5000); // Load every 5 seconds
   </script>
 </body>
 </html>
