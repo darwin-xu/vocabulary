@@ -141,11 +141,11 @@
 
   <div class="container">
     <h2>Add a New Word</h2>
-    <form id="vocabForm">
+    <form id="vocabForm" autocomplete="off">
       <input type="text" id="word" placeholder="Word" required />
       <input type="text" id="meaning" placeholder="Meaning" required />
       <input type="text" id="example" placeholder="Example Sentence" />
-      <input type="password" id="personalAccessToken" placeholder="Your Personal Access Token" required />
+      <input type="password" id="personalAccessToken" placeholder="Your Personal Access Token" required autocomplete="new-password" />
       <button type="submit">Add Word</button>
     </form>
 
