@@ -181,7 +181,7 @@
     // Fetch vocabulary.json and display it in a table
     async function loadVocabulary() {
       try {
-        const response = await fetch('https://api.github.com/repos/darwin-xu/vocabulary/contents/vocabulary.json');
+        const response = await fetch('https://api.github.com/repos/darwin-xu/vocabulary/contents/vocabulary.json?cache_bust=${new Date().getTime()}');
         if (!response.ok) {
           throw new Error('Failed to fetch vocabulary');
         }
