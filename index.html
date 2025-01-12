@@ -118,6 +118,12 @@
       max-width: 400px;
     }
 
+    .update-time {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #6c757d;
+    }
+
     @media (max-width: 768px) {
       table {
         font-size: 14px;
@@ -141,11 +147,11 @@
 
   <div class="container">
     <h2>Add a New Word</h2>
-    <form id="vocabForm" autocomplete="off">
+    <form id="vocabForm">
       <input type="text" id="word" placeholder="Word" required />
       <input type="text" id="meaning" placeholder="Meaning" required />
-      <input type="text" id="example" placeholder="Example Sentence" autocomplete="off" />
-      <input type="password" id="personalAccessToken" placeholder="Your Personal Access Token" required autocomplete="off" />
+      <input type="text" id="example" placeholder="Example Sentence" />
+      <input type="text" id="personalAccessToken" placeholder="Your Personal Access Token" required />
       <button type="submit">Add Word</button>
     </form>
 
@@ -169,6 +175,8 @@
         <!-- Words will be dynamically added here -->
       </tbody>
     </table>
+
+    <div class="update-time" id="updateTime"></div>
   </div>
 
   <footer>
@@ -189,8 +197,9 @@
         const content = atob(fileData.content); // Decode base64 content
         vocabulary = JSON.parse(content);
         displayVocabulary(vocabulary);
-        } catch (error) {
-        alert('Error loading vocabulary. Please check if the repository is public.');
+        document.getElementById('updateTime').textContent = `Last updated: ${new Date().toLocaleString()}`;
+      } catch (error) {
+        // Ignore errors
       }
     }
 
