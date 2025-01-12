@@ -121,7 +121,7 @@
     .update-time {
       margin-top: 10px;
       font-size: 14px;
-      color: #6c757d;
+      color: #ffffff; /* Change to a clearer color */
     }
 
     @media (max-width: 768px) {
@@ -264,6 +264,11 @@
       vocabulary.sort((a, b) => a.word.localeCompare(b.word));
 
       await updateVocabulary('Add a new word', token);
+
+      // Clear input fields
+      document.getElementById('word').value = '';
+      document.getElementById('meaning').value = '';
+      document.getElementById('example').value = '';
     });
 
     // Batch delete words
@@ -282,6 +287,7 @@
       const wordsToRemove = Array.from(selected).map(input => input.dataset.word);
       vocabulary = vocabulary.filter(entry => !wordsToRemove.includes(entry.word));
       await updateVocabulary('Batch delete words', token);
+      selectedWords.clear(); // Clear the selectedWords set
     });
 
     // Update vocabulary.json
